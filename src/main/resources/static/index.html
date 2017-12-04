@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<head>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+
+<div class="jumbotron text-center">
+    <h1>Sterowanie kamerą</h1>
+    <p>klikaj</p>
+</div>
+
+<table style="height:280px; width:280px" align="center">
+    <tr>
+        <th></th>
+        <th><button ng-click='onClickFunc("move_up 5")' type="button" style="width:100%" class="btn btn-default">Up</button></th>
+        <th></th>
+        <th><button ng-click='onClickFunc("zoom_tele")' type="button" style="width:100%" class="btn btn-default">Zoom +</button></th>
+    </tr>
+    <tr>
+        <td><button ng-click='onClickFunc("move_left 5")' type="button" style="width:100%" class="btn btn-default">Left</button></td>
+        <td></td>
+        <td><button ng-click='onClickFunc("move_right 5")' type="button" style="width:100%" class="btn btn-default">Right</button></td>
+        <td><button ng-click='onClickFunc("zoom_stop")' type="button" style="width:100%" class="btn btn-default">Zoom stop</button></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><button ng-click='onClickFunc("move_down 5")' type="button" style="width:100%" class="btn btn-default">Down</button></td>
+        <td></td>
+        <td><button ng-click='onClickFunc("zoom_wide")' type="button" style="width:100%" class="btn btn-default">Zoom -</button></td>
+    </tr>
+    <tr>
+        <td><button ng-click='onClickFunc("address")' type="button" style="width:100%" class="btn btn-default">Address</button></td>
+        <td><button ng-click='onClickFunc("poweron")' type="button" style="width:100%" class="btn btn-default">Power On</button></td>
+        <td><button ng-click='onClickFunc("reset")' type="button" style="width:100%" class="btn btn-default">Reset</button></td>
+        <td></td>
+    </tr>
+</table>
+
+<p>{{dupa}}</p>
+
+<script>
+    var app = angular.module("myApp", []);
+    app.controller("myCtrl", ['$scope', '$http', function($scope, $http) {
+        $scope.onClickFunc = function (command) {
+            var dataObj = {
+                command : command
+            };
+            var res = $http.post('/command_json', dataObj);
+            res.success(function(data, status, headers, config) {
+                $scope.dupa = data;
+            });
+            res.error(function(data, status, headers, config) {
+                alert( "failure message: " + JSON.stringify({data: data}));
+            });
+        }
+    }]);
+</script>
+
+</body>
+</html>
+
